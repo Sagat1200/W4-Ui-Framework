@@ -1,0 +1,52 @@
+{
+    "name": "w4/ui-framework",
+    "description": "Paquete de abstraccion de componentes de usuario y gestor de temas para Laravel PHP.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "w4-software",
+        "laravel",
+        "ui-framework"
+    ],
+    "autoload": {
+        "psr-4": {
+            "W4\\UiFramework\\": "src/"
+        },
+        "files": [
+      "src/Helpers/helpers.php"
+    ]
+    },
+    "authors": [
+        {
+            "name": "Francisco J. Morales", 
+            "email": "franciscomorales@w4.software",
+            "role": "Developer",
+            "homepage": "https://w4.software/packages"
+        }
+    ],
+    "require": {
+        "php": "^8.3",
+        "composer/installers": "^2.0",
+        "laravel/framework": "^13.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "W4\\UiFramework\\Providers\\W4UiFrameworkServiceProvider" 
+            ]
+        },
+      "aliases": {
+        "W4Ui": "W4\\UiFramework\\Facades\\W4Ui"
+      }
+    },
+    "config": {
+        "sort-packages": true,
+        "preferred-install": "dist",
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

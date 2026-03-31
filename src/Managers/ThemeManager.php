@@ -1,0 +1,39 @@
+<?php
+
+namespace W4\UiFramework\Managers;
+
+use W4\UiFramework\Contracts\ThemeInterface;
+
+class ThemeManager
+{
+    /**
+     * @var array<string, ThemeInterface>
+     */
+    protected array $themes = [];
+
+    public function register(string $key, ThemeInterface $theme): static
+    {
+        $this->themes[$key] = $theme;
+
+        return $this;
+    }
+
+    public function resolve(?string $key): ?ThemeInterface
+    {
+        if ($key === null) {
+            return null;
+        }
+
+        return $this->themes[$key] ?? null;
+    }
+
+    public function currentTheme(): string
+    {
+        return config('w4_ui_framework.theme', 'bootstrap');
+    }
+
+    public function all(): array
+    {
+        return $this->themes;
+    }
+}
