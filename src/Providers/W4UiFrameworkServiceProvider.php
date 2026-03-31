@@ -4,8 +4,8 @@ namespace W4\UiFramework\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use W4\UiFramework\Components\Button\Button;
-use W4\UiFramework\Components\Input\Input;
+use W4\UiFramework\Components\UI\Button\Button;
+use W4\UiFramework\Components\UI\Input\Input;
 use W4\UiFramework\Core\ComponentFactory;
 use W4\UiFramework\Core\ComponentRegistry;
 use W4\UiFramework\Core\RendererPipeline;
@@ -18,6 +18,9 @@ use W4\UiFramework\Support\W4UiManager;
 use W4\UiFramework\Themes\Bootstrap\BootstrapTheme;
 use W4\UiFramework\Themes\DaisyUI\DaisyTheme;
 use W4\UiFramework\View\Components\Render as RenderComponent;
+// Componentes w4-component
+use W4\UIFramework\View\Components\UI\Button as ButtonBladeComponent;
+use W4\UIFramework\View\Components\UI\Input as InputBladeComponent;
 
 class W4UiFrameworkServiceProvider extends ServiceProvider
 {
@@ -97,5 +100,8 @@ class W4UiFrameworkServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'w4-ui');
 
         Blade::component('w4-render', RenderComponent::class);
+
+        Blade::component('w4-button', ButtonBladeComponent::class);
+        Blade::component('w4-input', InputBladeComponent::class);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace W4\UiFramework\Themes\DaisyUI\Components;
+namespace W4\UiFramework\Themes\DaisyUI\Components\UI;
 
 use W4\UiFramework\Contracts\ComponentThemeResolverInterface;
 use W4\UiFramework\Support\ClassBag;

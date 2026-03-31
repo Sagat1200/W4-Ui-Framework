@@ -1,7 +1,9 @@
 <?php
 
-namespace W4\UiFramework\Components\Button;
+namespace W4\UiFramework\Components\UI\Button;
 
+use W4\UiFramework\Components\UI\Button\ButtonComponentState;
+use W4\UiFramework\Components\UI\Button\ButtonInteractState;
 use W4\UiFramework\Core\BaseComponent;
 use W4\UiFramework\Support\Traits\InteractsWithSize;
 use W4\UiFramework\Support\Traits\InteractsWithState;

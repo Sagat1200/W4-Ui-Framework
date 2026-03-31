@@ -1,6 +1,6 @@
 <?php
 
-namespace W4\UiFramework\Components\Button;
+namespace W4\UiFramework\Components\UI\Button;
 
 class ButtonInteractState
 {

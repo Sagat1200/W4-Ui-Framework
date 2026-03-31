@@ -1,6 +1,6 @@
 <?php
 
-namespace W4\UiFramework\Themes\DaisyUI\Components;
+namespace W4\UiFramework\Themes\Bootstrap\Components\UI;
 
 use W4\UiFramework\Contracts\ComponentThemeResolverInterface;
 use W4\UiFramework\Support\ClassBag;
@@ -13,28 +13,24 @@ class InputThemeResolver implements ComponentThemeResolverInterface
         $size = $context['size'] ?? 'md';
         $state = $context['state'] ?? 'enabled';
 
-        $inputClasses = ClassBag::make(['input', 'input-bordered', 'w-full']);
+        $inputClasses = ClassBag::make('form-control');
 
         match ($size) {
-            'xs' => $inputClasses->add('input-xs'),
-            'sm' => $inputClasses->add('input-sm'),
-            'lg' => $inputClasses->add('input-lg'),
+            'sm' => $inputClasses->add('form-control-sm'),
+            'lg' => $inputClasses->add('form-control-lg'),
             default => null,
         };
 
         match ($variant) {
-            'primary' => $inputClasses->add('input-primary'),
-            'secondary' => $inputClasses->add('input-secondary'),
-            'accent' => $inputClasses->add('input-accent'),
-            'success' => $inputClasses->add('input-success'),
-            'warning' => $inputClasses->add('input-warning'),
-            'danger', 'error' => $inputClasses->add('input-error'),
+            'success' => $inputClasses->add('is-valid'),
+            'danger', 'error' => $inputClasses->add('is-invalid'),
+            'warning' => $inputClasses->add('border-warning'),
             default => null,
         };
 
         match ($state) {
-            'valid' => $inputClasses->add('input-success'),
-            'invalid' => $inputClasses->add('input-error'),
+            'valid' => $inputClasses->add('is-valid'),
+            'invalid' => $inputClasses->add('is-invalid'),
             'loading' => $inputClasses->add('opacity-75'),
             default => null,
         };
@@ -44,11 +40,11 @@ class InputThemeResolver implements ComponentThemeResolverInterface
         }
 
         return [
-            'root' => 'form-control w-full',
+            'root' => 'w-100',
             'input' => $inputClasses->toString(),
-            'helper' => 'label-text-alt',
-            'error' => 'label-text-alt text-error',
-            'label' => 'label-text',
+            'helper' => 'form-text',
+            'error' => 'invalid-feedback d-block',
+            'label' => 'form-label',
         ];
     }
 

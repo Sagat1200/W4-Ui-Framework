@@ -1,6 +1,6 @@
 <?php
 
-namespace W4\UiFramework\Components\Input;
+namespace W4\UiFramework\Components\UI\Input;
 
 class InputInteractState
 {

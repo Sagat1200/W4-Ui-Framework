@@ -1,7 +1,9 @@
 <?php
 
-namespace W4\UiFramework\Components\Input;
+namespace W4\UiFramework\Components\UI\Input;
 
+use W4\UiFramework\Components\UI\Input\InputComponentState;
+use W4\UiFramework\Components\UI\Input\InputInteractState;
 use W4\UiFramework\Core\BaseComponent;
 use W4\UiFramework\Support\Traits\InteractsWithSize;
 use W4\UiFramework\Support\Traits\InteractsWithState;

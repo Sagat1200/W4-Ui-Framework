@@ -3,8 +3,8 @@
 namespace W4\UiFramework\Themes\DaisyUI;
 
 use W4\UiFramework\Core\AbstractTheme;
-use W4\UiFramework\Themes\DaisyUI\Components\ButtonThemeResolver;
-use W4\UiFramework\Themes\DaisyUI\Components\InputThemeResolver;
+use W4\UiFramework\Themes\DaisyUI\Components\UI\ButtonThemeResolver;
+use W4\UiFramework\Themes\DaisyUI\Components\UI\InputThemeResolver;
 
 class DaisyTheme extends AbstractTheme
 {

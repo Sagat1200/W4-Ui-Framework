@@ -3,8 +3,8 @@
 namespace W4\UiFramework\Themes\Bootstrap;
 
 use W4\UiFramework\Core\AbstractTheme;
-use W4\UiFramework\Themes\Bootstrap\Components\ButtonThemeResolver;
-use W4\UiFramework\Themes\Bootstrap\Components\InputThemeResolver;
+use W4\UiFramework\Themes\Bootstrap\Components\UI\ButtonThemeResolver;
+use W4\UiFramework\Themes\Bootstrap\Components\UI\InputThemeResolver;
 
 class BootstrapTheme extends AbstractTheme
 {

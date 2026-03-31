@@ -2,8 +2,8 @@
 
 namespace W4\UiFramework\Tests;
 
-use W4\UiFramework\Components\Button\Button;
-use W4\UiFramework\Components\Input\Input;
+use W4\UiFramework\Components\UI\Button\Button;
+use W4\UiFramework\Components\UI\Input\Input;
 use W4\UiFramework\Core\ComponentFactory;
 use W4\UiFramework\Core\ComponentRegistry;
 use W4\UiFramework\Managers\RendererManager;
