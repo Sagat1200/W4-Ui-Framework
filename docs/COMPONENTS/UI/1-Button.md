@@ -18,14 +18,14 @@
 
 Clase principal:
 
-`W4\UiFramework\Components\Button\Button`
+`W4\UiFramework\Components\UI\Button\Button`
 
 ## 2. 🧱 API del Componente
 
 Creación base:
 
 ```php
-use W4\UiFramework\Components\Button\Button;
+use W4\UiFramework\Components\UI\Button\Button;
 
 $button = Button::make('Guardar');
 ```
@@ -38,7 +38,7 @@ $button = Button::make('Guardar')
     ->id('btn-save')
     ->variant('primary')
     ->size('md')
-    ->state(\W4\UiFramework\Components\Button\ButtonComponentState::ENABLED)
+    ->state(\W4\UiFramework\Components\UI\Button\ButtonComponentState::ENABLED)
     ->attribute('data-action', 'save')
     ->meta('permission', 'orders.update');
 ```
@@ -71,7 +71,7 @@ Estados soportados por `ButtonComponentState`:
 Estado de interacción:
 
 ```php
-use W4\UiFramework\Components\Button\ButtonInteractState;
+use W4\UiFramework\Components\UI\Button\ButtonInteractState;
 
 $button->interactState(new ButtonInteractState(
     hovered: true,
@@ -101,6 +101,8 @@ DaisyUI (`DaisyTheme`):
 ### 4.1 Helper global (`w4_render`)
 
 ```php
+use W4\UiFramework\Components\UI\Button\Button;
+
 echo w4_render(
     Button::make('Guardar')->primary()->lg()
 );
@@ -109,6 +111,7 @@ echo w4_render(
 ### 4.2 Facade (`W4Ui`)
 
 ```php
+use W4\UiFramework\Components\UI\Button\Button;
 use W4\UiFramework\Facades\W4Ui;
 
 echo W4Ui::render(
@@ -116,23 +119,50 @@ echo W4Ui::render(
 );
 ```
 
-### 4.3 Componente Blade (`x-w4-render`)
+### 4.3 Componente Blade genérico (`x-w4-render`)
 
 ```php
 @php
-    $button = \W4\UiFramework\Components\Button\Button::make('Enviar')->success();
+    $button = \W4\UiFramework\Components\UI\Button\Button::make('Enviar')->success();
 @endphp
 
 <x-w4-render :component="$button" />
 ```
 
-### 4.4 Vista/payload para integración avanzada
+### 4.4 Componente Blade directo (`x-w4-button`)
+
+```blade
+<x-w4-button
+    label="Guardar"
+    name="save"
+    variant="primary"
+    size="md"
+    type="submit"
+/>
+```
+
+Parámetros Blade más comunes en `x-w4-button`:
+
+- `label`
+- `id`
+- `name`
+- `theme`
+- `renderer`
+- `variant`
+- `size`
+- `type`
+- `icon`
+- `disabled`
+- `loading`
+
+### 4.5 Vista/payload para integración avanzada
 
 ```php
-use W4\UiFramework\Components\Button\Button;
+use W4\UiFramework\Components\UI\Button\Button;
+use W4\UiFramework\Components\UI\Button\ButtonComponentState;
 use W4\UiFramework\Facades\W4Ui;
 
-$button = Button::make('Procesar')->state(\W4\UiFramework\Components\Button\ButtonComponentState::LOADING);
+$button = Button::make('Procesar')->state(ButtonComponentState::LOADING);
 
 $view = W4Ui::view($button);
 $payload = W4Ui::payload($button);

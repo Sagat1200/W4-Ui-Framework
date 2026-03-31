@@ -25,14 +25,14 @@ Abstrae:
 
 Clase principal:
 
-`W4\UiFramework\Components\Input\Input`
+`W4\UiFramework\Components\UI\Input\Input`
 
 ## 2. 🧱 API del Componente
 
 Creación base:
 
 ```php
-use W4\UiFramework\Components\Input\Input;
+use W4\UiFramework\Components\UI\Input\Input;
 
 $input = Input::make('Correo');
 ```
@@ -40,7 +40,7 @@ $input = Input::make('Correo');
 Fluent API más usada:
 
 ```php
-use W4\UiFramework\Components\Input\InputComponentState;
+use W4\UiFramework\Components\UI\Input\InputComponentState;
 
 $input = Input::make('Correo')
     ->name('email')
@@ -94,7 +94,7 @@ Estados soportados por `InputComponentState`:
 Estado de interacción:
 
 ```php
-use W4\UiFramework\Components\Input\InputInteractState;
+use W4\UiFramework\Components\UI\Input\InputInteractState;
 
 $input->interactState(new InputInteractState(
     focused: true,
@@ -126,7 +126,7 @@ DaisyUI (`DaisyTheme`):
 ### 4.1 Helper global (`w4_render`)
 
 ```php
-use W4\UiFramework\Components\Input\Input;
+use W4\UiFramework\Components\UI\Input\Input;
 
 echo w4_render(
     Input::make('Nombre')->name('name')->placeholder('Tu nombre')
@@ -136,7 +136,7 @@ echo w4_render(
 ### 4.2 Facade (`W4Ui`)
 
 ```php
-use W4\UiFramework\Components\Input\Input;
+use W4\UiFramework\Components\UI\Input\Input;
 use W4\UiFramework\Facades\W4Ui;
 
 echo W4Ui::render(
@@ -144,11 +144,11 @@ echo W4Ui::render(
 );
 ```
 
-### 4.3 Componente Blade (`x-w4-render`)
+### 4.3 Componente Blade genérico (`x-w4-render`)
 
 ```php
 @php
-    $input = \W4\UiFramework\Components\Input\Input::make('Usuario')
+    $input = \W4\UiFramework\Components\UI\Input\Input::make('Usuario')
         ->name('username')
         ->placeholder('usuario');
 @endphp
@@ -156,11 +156,41 @@ echo W4Ui::render(
 <x-w4-render :component="$input" />
 ```
 
-### 4.4 Vista/payload para integración avanzada
+### 4.4 Componente Blade directo (`x-w4-input`)
+
+```blade
+<x-w4-input
+    label="Correo"
+    name="email"
+    type="email"
+    placeholder="correo@dominio.com"
+    variant="default"
+    size="md"
+/>
+```
+
+Parámetros Blade más comunes en `x-w4-input`:
+
+- `label`
+- `id`
+- `name`
+- `theme`
+- `renderer`
+- `type`
+- `value`
+- `placeholder`
+- `helperText`
+- `errorMessage`
+- `variant`
+- `size`
+- `disabled`
+- `readonly`
+
+### 4.5 Vista/payload para integración avanzada
 
 ```php
-use W4\UiFramework\Components\Input\Input;
-use W4\UiFramework\Components\Input\InputComponentState;
+use W4\UiFramework\Components\UI\Input\Input;
+use W4\UiFramework\Components\UI\Input\InputComponentState;
 use W4\UiFramework\Facades\W4Ui;
 
 $input = Input::make('Código')
@@ -179,8 +209,8 @@ $payload = W4Ui::payload($input);
 Ejemplo con DaisyUI, estado inválido y clases extra:
 
 ```php
-use W4\UiFramework\Components\Input\Input;
-use W4\UiFramework\Components\Input\InputComponentState;
+use W4\UiFramework\Components\UI\Input\Input;
+use W4\UiFramework\Components\UI\Input\InputComponentState;
 
 $input = Input::make('Teléfono')
     ->theme('daisyui')
