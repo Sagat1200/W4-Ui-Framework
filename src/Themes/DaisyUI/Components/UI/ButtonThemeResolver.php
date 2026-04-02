@@ -23,15 +23,15 @@ class ButtonThemeResolver implements ComponentThemeResolverInterface
             'warning' => 'btn-warning',
             'info' => 'btn-info',
             'error', 'danger' => 'btn-error',
-            'ghost' => 'btn-ghost',
-            'link' => 'btn-link',
             default => 'btn-primary',
         });
 
         match ($size) {
             'xs' => $classes->add('btn-xs'),
             'sm' => $classes->add('btn-sm'),
+            'md' => $classes->add('btn'),
             'lg' => $classes->add('btn-lg'),
+            'xl' => $classes->add('btn-xl'),
             default => null,
         };
 

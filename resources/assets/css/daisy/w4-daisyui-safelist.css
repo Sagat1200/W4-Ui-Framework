@@ -7,6 +7,6 @@
 @source inline("btn-xs btn-sm btn-lg btn-xl");
 @source inline("loading");
 @source inline("input input-bordered w-full");
-@source inline("input-primary input-secondary input-accent input-success input-warning input-error");
-@source inline("input-xs input-sm input-lg");
+@source inline("input-neutral input-primary input-secondary input-accent input-info input-success input-warning input-error");
+@source inline("input-xs input-sm input-md input-lg input-xl");
 @source inline("form-control label-text label-text-alt text-error opacity-75");
