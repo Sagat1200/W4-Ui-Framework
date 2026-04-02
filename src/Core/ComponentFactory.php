@@ -38,29 +38,29 @@ class ComponentFactory
 
         $component = $this->make($type);
 
-        if (isset($payload['id'])) {
-            $component->id($payload['id']);
+        if (isset($payload['id']) && is_callable([$component, 'id'])) {
+            call_user_func([$component, 'id'], $payload['id']);
         }
 
-        if (isset($payload['name']) && method_exists($component, 'name')) {
-            $component->name($payload['name']);
+        if (isset($payload['name']) && is_callable([$component, 'name'])) {
+            call_user_func([$component, 'name'], $payload['name']);
         }
 
-        if (isset($payload['label']) && method_exists($component, 'label')) {
-            $component->label($payload['label']);
+        if (isset($payload['label']) && is_callable([$component, 'label'])) {
+            call_user_func([$component, 'label'], $payload['label']);
         }
 
-        if (isset($payload['theme']) && method_exists($component, 'theme')) {
-            $component->theme($payload['theme']);
+        if (isset($payload['theme']) && is_callable([$component, 'theme'])) {
+            call_user_func([$component, 'theme'], $payload['theme']);
         }
 
-        if (! empty($payload['attributes']) && method_exists($component, 'attributes')) {
-            $component->attributes($payload['attributes']);
+        if (! empty($payload['attributes']) && is_callable([$component, 'attributes'])) {
+            call_user_func([$component, 'attributes'], $payload['attributes']);
         }
 
-        if (! empty($payload['meta']) && method_exists($component, 'meta')) {
+        if (! empty($payload['meta']) && is_callable([$component, 'meta'])) {
             foreach ($payload['meta'] as $key => $value) {
-                $component->meta($key, $value);
+                call_user_func([$component, 'meta'], $key, $value);
             }
         }
 
