@@ -52,6 +52,21 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertTrue($this->app->make('view')->exists('w4-ui::components.ui.button'));
     }
 
+    public function test_registers_blade_component_with_custom_prefix_from_config(): void
+    {
+        config()->set('w4_ui_framework.w4_ui_component_prefix', 'admin');
+
+        $provider = new W4UiFrameworkServiceProvider($this->app);
+        $provider->boot();
+
+        $aliases = $this->app->make('blade.compiler')->getClassComponentAliases();
+
+        $this->assertArrayHasKey('admin-render', $aliases);
+        $this->assertSame(Render::class, $aliases['admin-render']);
+        $this->assertArrayHasKey('admin-button', $aliases);
+        $this->assertArrayHasKey('admin-input', $aliases);
+    }
+
     public function test_publishes_config_file_to_expected_target(): void
     {
         $publishes = W4UiFrameworkServiceProvider::pathsToPublish(

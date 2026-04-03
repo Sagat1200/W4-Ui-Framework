@@ -99,9 +99,28 @@ class W4UiFrameworkServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'w4-ui');
 
-        Blade::component('w4-render', RenderComponent::class);
+        $prefix = $this->resolveComponentPrefix();
 
-        Blade::component('w4-button', ButtonBladeComponent::class);
-        Blade::component('w4-input', InputBladeComponent::class);
+        Blade::component($this->componentAlias($prefix, 'render'), RenderComponent::class);
+        Blade::component($this->componentAlias($prefix, 'button'), ButtonBladeComponent::class);
+        Blade::component($this->componentAlias($prefix, 'input'), InputBladeComponent::class);
+    }
+
+    protected function resolveComponentPrefix(): string
+    {
+        $prefix = (string) config('w4_ui_framework.w4_ui_component_prefix', 'w4');
+        $normalized = strtolower(trim($prefix));
+        $normalized = str_replace(['_', ' '], '-', $normalized);
+
+        return trim($normalized, '-');
+    }
+
+    protected function componentAlias(string $prefix, string $name): string
+    {
+        if ($prefix === '') {
+            return $name;
+        }
+
+        return $prefix . '-' . $name;
     }
 }

@@ -58,6 +58,8 @@ return [
 
     /*
      * Configuración de prefijo de componentes:
+     * Por defecto es w4
+     * Usted puede cambiarlo si desea utilizar un prefijo diferente.
      */
     'w4_ui_component_prefix' => 'w4',
 ];
