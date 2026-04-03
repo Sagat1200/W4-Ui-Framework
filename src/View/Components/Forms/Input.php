@@ -16,6 +16,7 @@ class Input extends BaseW4BladeComponent
         ?string $name = null,
         ?string $theme = null,
         ?string $renderer = null,
+        string|int|null $componentId = null,
         public string $type = 'text',
         public ?string $value = null,
         public ?string $placeholder = null,
@@ -37,6 +38,7 @@ class Input extends BaseW4BladeComponent
             name: $name,
             theme: $theme,
             renderer: $renderer,
+            componentId: $componentId,
         );
     }
 

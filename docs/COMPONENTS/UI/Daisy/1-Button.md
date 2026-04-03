@@ -380,6 +380,20 @@ Botón activo:
 />
 ```
 
+Botón con `componentId` para auditoría/estado:
+
+```blade
+<x-w4-button
+    label="Guardar cambios"
+    name="save"
+    theme="daisyui"
+    :componentId="12547"
+    variant="primary"
+    size="md"
+    type="submit"
+/>
+```
+
 ## 6. 🧩 Ejemplo en controlador Laravel
 
 ```php

@@ -14,6 +14,7 @@ abstract class BaseW4BladeComponent extends Component
         public ?string $name = null,
         public ?string $theme = null,
         public ?string $renderer = null,
+        public string|int|null $componentId = null,
     ) {}
 
     /**
@@ -57,6 +58,16 @@ abstract class BaseW4BladeComponent extends Component
 
         if ($this->theme && is_callable([$component, 'theme'])) {
             call_user_func([$component, 'theme'], $this->theme);
+        }
+
+        if ($this->componentId !== null) {
+            if (is_callable([$component, 'meta'])) {
+                call_user_func([$component, 'meta'], 'component_id', $this->componentId);
+            }
+
+            if (is_callable([$component, 'attribute'])) {
+                call_user_func([$component, 'attribute'], 'data-component-id', (string) $this->componentId);
+            }
         }
 
         return $component;

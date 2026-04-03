@@ -1,6 +1,6 @@
 # W4 UI Framework
 
-Paquete Laravel para construir y renderizar componentes UI desacoplados (core + tema + renderer), con soporte de tema dinámico y wrappers Blade.
+Paquete de abstraccion y contruccion de componentes de usuario y gestor de temas para Laravel PHP.
 
 ## ¿Qué incluye?
 

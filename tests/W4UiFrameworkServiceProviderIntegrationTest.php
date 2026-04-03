@@ -11,6 +11,7 @@ use W4\UiFramework\Managers\RendererManager;
 use W4\UiFramework\Managers\ThemeManager;
 use W4\UiFramework\Providers\W4UiFrameworkServiceProvider;
 use W4\UiFramework\View\Components\Render;
+use W4\UiFramework\View\Components\Forms\Input as InputBladeComponent;
 use W4\UiFramework\View\Components\UI\Button as ButtonBladeComponent;
 
 class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
@@ -183,5 +184,28 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
                 rmdir($layoutDir);
             }
         }
+    }
+
+    public function test_blade_wrappers_map_component_id_to_meta_and_attributes(): void
+    {
+        $bladeButton = new ButtonBladeComponent(
+            label: 'Guardar',
+            componentId: 12547
+        );
+
+        $buttonPayload = $this->app->make('w4.ui')->payload($bladeButton->component());
+
+        $this->assertSame(12547, $buttonPayload['data']['meta']['component_id']);
+        $this->assertSame('12547', $buttonPayload['data']['attributes']['data-component-id']);
+
+        $bladeInput = new InputBladeComponent(
+            label: 'Correo',
+            componentId: 'audit-input-01'
+        );
+
+        $inputPayload = $this->app->make('w4.ui')->payload($bladeInput->component());
+
+        $this->assertSame('audit-input-01', $inputPayload['data']['meta']['component_id']);
+        $this->assertSame('audit-input-01', $inputPayload['data']['attributes']['data-component-id']);
     }
 }

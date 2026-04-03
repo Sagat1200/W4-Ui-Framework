@@ -16,6 +16,7 @@ class Button extends BaseW4BladeComponent
         ?string $name = null,
         ?string $theme = null,
         ?string $renderer = null,
+        string|int|null $componentId = null,
         public string $variant = 'primary',
         public string $size = 'md',
         public ?string $type = 'button',
@@ -30,6 +31,7 @@ class Button extends BaseW4BladeComponent
             name: $name,
             theme: $theme,
             renderer: $renderer,
+            componentId: $componentId,
         );
     }
 

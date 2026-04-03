@@ -436,6 +436,20 @@ Input con interacción marcada:
 />
 ```
 
+Input con `componentId` para auditoría/estado:
+
+```blade
+<x-w4-input
+    label="Correo"
+    name="email"
+    theme="daisyui"
+    :componentId="12547"
+    type="email"
+    variant="primary"
+    placeholder="correo@dominio.com"
+/>
+```
+
 ## 6. 🧩 Ejemplo en controlador Laravel
 
 ```php
