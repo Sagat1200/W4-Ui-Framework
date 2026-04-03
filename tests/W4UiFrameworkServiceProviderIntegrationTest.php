@@ -11,6 +11,8 @@ use W4\UiFramework\Core\ComponentRegistry;
 use W4\UiFramework\Managers\RendererManager;
 use W4\UiFramework\Managers\ThemeManager;
 use W4\UiFramework\Providers\W4UiFrameworkServiceProvider;
+use W4\UiFramework\Themes\Tailwind\Components\Forms\InputThemeResolver as TailwindInputThemeResolver;
+use W4\UiFramework\Themes\Tailwind\Components\UI\ButtonThemeResolver as TailwindButtonThemeResolver;
 use W4\UiFramework\View\Components\Render;
 use W4\UiFramework\View\Components\Forms\Input as InputBladeComponent;
 use W4\UiFramework\View\Components\UI\Button as ButtonBladeComponent;
@@ -322,5 +324,33 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertStringContainsString('btn-primary', $buttonHeightPayload['theme']['classes']['root']);
         $this->assertStringContainsString('h-14', $buttonHeightPayload['theme']['classes']['root']);
         $this->assertStringNotContainsString('btn-sm', $buttonHeightPayload['theme']['classes']['root']);
+    }
+
+    public function test_tailwind_theme_resolvers_merge_variant_with_width_and_height_utilities(): void
+    {
+        $inputResolver = new TailwindInputThemeResolver();
+        $inputClasses = $inputResolver->classes([
+            'variant' => 'primary',
+            'size' => 'xs',
+            'attributes' => ['class' => 'w-52 h-14'],
+        ]);
+
+        $this->assertStringContainsString('focus:ring-blue-500', $inputClasses['input']);
+        $this->assertStringContainsString('w-52', $inputClasses['input']);
+        $this->assertStringContainsString('h-14', $inputClasses['input']);
+        $this->assertStringNotContainsString('w-full', $inputClasses['input']);
+        $this->assertStringNotContainsString('py-1', $inputClasses['input']);
+
+        $buttonResolver = new TailwindButtonThemeResolver();
+        $buttonClasses = $buttonResolver->classes([
+            'variant' => 'primary',
+            'size' => 'sm',
+            'attributes' => ['class' => 'h-14 w-52'],
+        ]);
+
+        $this->assertStringContainsString('bg-blue-600', $buttonClasses['root']);
+        $this->assertStringContainsString('h-14', $buttonClasses['root']);
+        $this->assertStringContainsString('w-52', $buttonClasses['root']);
+        $this->assertStringNotContainsString('py-1.5', $buttonClasses['root']);
     }
 }
