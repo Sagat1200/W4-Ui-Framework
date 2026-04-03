@@ -2,6 +2,7 @@
 
 namespace W4\UiFramework\Tests;
 
+use Illuminate\Support\Facades\Log;
 use W4\UiFramework\Components\UI\Button\Button;
 use W4\UiFramework\Components\UI\Button\ButtonComponentEvent;
 use W4\UiFramework\Components\Forms\Input\Input;
@@ -224,5 +225,30 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertSame(12547, $summary['component_id']);
         $this->assertSame('12547', $summary['dom_component_id']);
         $this->assertIsArray($summary['payload']);
+    }
+
+    public function test_logs_component_debug_when_w4_ui_debug_is_enabled_and_component_has_data_component_id(): void
+    {
+        config()->set('w4_ui_framework.w4_ui_debug', true);
+        Log::spy();
+
+        $bladeButton = new ButtonBladeComponent(
+            label: 'Guardar',
+            componentId: 12547,
+            active: true
+        );
+
+        $this->app->make('w4.ui')->payload($bladeButton->component());
+
+        Log::shouldHaveReceived('debug')
+            ->once()
+            ->withArgs(function (string $message, array $context): bool {
+                return $message === 'w4_ui.component_debug'
+                    && $context['origin'] === 'payload'
+                    && $context['component'] === 'button'
+                    && $context['component_id'] === 12547
+                    && $context['dom_component_id'] === '12547'
+                    && $context['state'] === 'active';
+            });
     }
 }

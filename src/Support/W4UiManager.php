@@ -4,6 +4,7 @@ namespace W4\UiFramework\Support;
 
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Log;
 use W4\UiFramework\Contracts\ComponentInterface;
 use W4\UiFramework\Core\RuntimeRenderer;
 
@@ -21,6 +22,8 @@ class W4UiManager
         if (! is_array($payload)) {
             return (string) $payload;
         }
+
+        $this->logDebugPayloadIfEnabled($payload, $renderer, 'render');
 
         $viewName = $payload['view'] ?? null;
 
@@ -44,6 +47,8 @@ class W4UiManager
             return (string) $payload;
         }
 
+        $this->logDebugPayloadIfEnabled($payload, $renderer, 'view');
+
         $viewName = $payload['view'] ?? null;
 
         if (! is_string($viewName) || $viewName === '') {
@@ -60,6 +65,40 @@ class W4UiManager
 
     public function payload(ComponentInterface $component, ?string $renderer = null): mixed
     {
-        return $this->runtimeRenderer->render($component, $renderer);
+        $payload = $this->runtimeRenderer->render($component, $renderer);
+
+        if (is_array($payload)) {
+            $this->logDebugPayloadIfEnabled($payload, $renderer, 'payload');
+        }
+
+        return $payload;
+    }
+
+    protected function logDebugPayloadIfEnabled(array $payload, ?string $renderer = null, string $origin = 'payload'): void
+    {
+        if (! config('w4_ui_framework.w4_ui_debug', false)) {
+            return;
+        }
+
+        $data = $payload['data'] ?? [];
+        $meta = is_array($data['meta'] ?? null) ? $data['meta'] : [];
+        $attributes = is_array($data['attributes'] ?? null) ? $data['attributes'] : [];
+        $domComponentId = $attributes['data-component-id'] ?? null;
+
+        if ($domComponentId === null || $domComponentId === '') {
+            return;
+        }
+
+        Log::debug('w4_ui.component_debug', [
+            'origin' => $origin,
+            'renderer' => $payload['renderer'] ?? $renderer,
+            'view' => $payload['view'] ?? null,
+            'component' => $payload['component'] ?? ($data['component'] ?? null),
+            'state' => $data['state'] ?? null,
+            'component_id' => $meta['component_id'] ?? null,
+            'dom_component_id' => $domComponentId,
+            'data' => $data,
+            'theme' => $payload['theme'] ?? [],
+        ]);
     }
 }

@@ -9,7 +9,7 @@ return [
      * Selección de tema:
      * Puedes seleccionar entre:
      * - bootstrap
-     * - boostswatch
+     * - bootswatch
      * - tailwind
      * - daisyui
      */
@@ -48,4 +48,16 @@ return [
             'enabled' => false,
         ],
     ],
+
+    /*
+     * Configuración de depuración
+     * Habilita depuración en todos los componentes.
+     * Nota: No se debe de utilizar en entorno de producción.
+     */
+    'w4_ui_debug' => false,
+
+    /*
+     * Configuración de prefijo de componentes:
+     */
+    'w4_ui_component_prefix' => 'w4',
 ];
