@@ -4,6 +4,7 @@
 
     $classes = $theme['classes'] ?? [];
     $attrs = $theme['attributes'] ?? [];
+    unset($attrs['class']);
 
     $rootClass = $classes['root'] ?? '';
     $inputClass = $classes['input'] ?? '';

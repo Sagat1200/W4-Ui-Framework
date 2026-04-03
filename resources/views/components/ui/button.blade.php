@@ -1,6 +1,7 @@
 @php
     $classes = $theme['classes']['root'] ?? '';
     $attrs = $theme['attributes'] ?? [];
+    unset($attrs['class']);
 @endphp
 
 <button

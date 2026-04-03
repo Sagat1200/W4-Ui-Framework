@@ -48,7 +48,22 @@ class InputThemeResolver implements ComponentThemeResolverInterface
         }
 
         if (! empty($context['attributes']['class'])) {
-            $inputClasses->merge($context['attributes']['class']);
+            $userClasses = (string) $context['attributes']['class'];
+
+            if (preg_match('/(?:^|\s)!?(?:[a-z0-9-]+:)*w-(?:\S+)/i', $userClasses) === 1) {
+                $inputClasses->remove('w-full');
+            }
+
+            if (preg_match('/(?:^|\s)!?(?:[a-z0-9-]+:)*(?:h|min-h|max-h)-(?:\S+)/i', $userClasses) === 1) {
+                $inputClasses
+                    ->remove('input-xs')
+                    ->remove('input-sm')
+                    ->remove('input-md')
+                    ->remove('input-lg')
+                    ->remove('input-xl');
+            }
+
+            $inputClasses->merge($userClasses);
         }
 
         return [

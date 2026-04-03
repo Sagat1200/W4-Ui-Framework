@@ -266,4 +266,61 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
                     && $context['state'] === 'active';
             });
     }
+
+    public function test_user_width_class_keeps_variant_classes_in_rendered_html(): void
+    {
+        $input = Input::make('Correo')
+            ->theme('daisyui')
+            ->variant('primary')
+            ->size('xs')
+            ->attribute('class', 'w-52');
+
+        $inputHtml = $this->app->make('w4.ui')->render($input);
+        $inputPayload = $this->app->make('w4.ui')->payload($input);
+
+        $this->assertStringContainsString('input-primary', $inputHtml);
+        $this->assertStringContainsString('w-52', $inputHtml);
+        preg_match('/<input\b[^>]*>/i', $inputHtml, $inputTagMatches);
+        $this->assertNotEmpty($inputTagMatches);
+        $this->assertSame(1, substr_count($inputTagMatches[0], 'class="'));
+        $this->assertStringContainsString('w-52', $inputPayload['theme']['classes']['input']);
+        $this->assertStringNotContainsString('w-full', $inputPayload['theme']['classes']['input']);
+
+        $inputWithHeight = Input::make('Correo')
+            ->theme('daisyui')
+            ->variant('primary')
+            ->size('xs')
+            ->attribute('class', 'h-14');
+
+        $inputHeightPayload = $this->app->make('w4.ui')->payload($inputWithHeight);
+
+        $this->assertStringContainsString('input-primary', $inputHeightPayload['theme']['classes']['input']);
+        $this->assertStringContainsString('h-14', $inputHeightPayload['theme']['classes']['input']);
+        $this->assertStringNotContainsString('input-xs', $inputHeightPayload['theme']['classes']['input']);
+
+        $button = Button::make('Guardar')
+            ->theme('daisyui')
+            ->variant('primary')
+            ->attribute('class', 'w-52');
+
+        $buttonHtml = $this->app->make('w4.ui')->render($button);
+
+        $this->assertStringContainsString('btn-primary', $buttonHtml);
+        $this->assertStringContainsString('w-52', $buttonHtml);
+        preg_match('/<button\b[^>]*>/i', $buttonHtml, $buttonTagMatches);
+        $this->assertNotEmpty($buttonTagMatches);
+        $this->assertSame(1, substr_count($buttonTagMatches[0], 'class="'));
+
+        $buttonWithHeight = Button::make('Guardar')
+            ->theme('daisyui')
+            ->variant('primary')
+            ->size('sm')
+            ->attribute('class', 'h-14');
+
+        $buttonHeightPayload = $this->app->make('w4.ui')->payload($buttonWithHeight);
+
+        $this->assertStringContainsString('btn-primary', $buttonHeightPayload['theme']['classes']['root']);
+        $this->assertStringContainsString('h-14', $buttonHeightPayload['theme']['classes']['root']);
+        $this->assertStringNotContainsString('btn-sm', $buttonHeightPayload['theme']['classes']['root']);
+    }
 }

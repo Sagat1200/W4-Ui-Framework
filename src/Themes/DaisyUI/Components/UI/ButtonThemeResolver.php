@@ -45,7 +45,18 @@ class ButtonThemeResolver implements ComponentThemeResolverInterface
         }
 
         if (! empty($context['attributes']['class'])) {
-            $classes->merge($context['attributes']['class']);
+            $userClasses = (string) $context['attributes']['class'];
+
+            if (preg_match('/(?:^|\s)!?(?:[a-z0-9-]+:)*(?:h|min-h|max-h)-(?:\S+)/i', $userClasses) === 1) {
+                $classes
+                    ->remove('btn-xs')
+                    ->remove('btn-sm')
+                    ->remove('btn-md')
+                    ->remove('btn-lg')
+                    ->remove('btn-xl');
+            }
+
+            $classes->merge($userClasses);
         }
 
         return [
