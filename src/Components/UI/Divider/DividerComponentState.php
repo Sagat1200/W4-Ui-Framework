@@ -1,8 +1,11 @@
 <?php
 
-namespace W4\Ui\Framework\Components\UI\Divider;
+namespace W4\UiFramework\Components\UI\Divider;
 
 enum DividerComponentState: string
 {
-    //
+    case ENABLED = 'enabled';
+    case DISABLED = 'disabled';
+    case ACTIVE = 'active';
+    case HIDDEN = 'hidden';
 }

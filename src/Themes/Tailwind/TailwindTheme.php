@@ -5,12 +5,14 @@ namespace W4\UiFramework\Themes\Tailwind;
 use W4\UiFramework\Core\AbstractTheme;
 use W4\UiFramework\Themes\Tailwind\Components\Forms\InputThemeResolver;
 use W4\UiFramework\Themes\Tailwind\Components\UI\ButtonThemeResolver;
+use W4\UiFramework\Themes\Tailwind\Components\UI\DividerThemeResolver;
 
 class TailwindTheme extends AbstractTheme
 {
     public function __construct()
     {
         $this->registerResolver('button', new ButtonThemeResolver());
+        $this->registerResolver('divider', new DividerThemeResolver());
         $this->registerResolver('input', new InputThemeResolver());
     }
 

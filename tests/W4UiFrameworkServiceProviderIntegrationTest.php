@@ -4,6 +4,7 @@ namespace W4\UiFramework\Tests;
 
 use W4\UiFramework\Components\UI\Button\Button;
 use W4\UiFramework\Components\UI\Button\ButtonComponentEvent;
+use W4\UiFramework\Components\UI\Divider\Divider;
 use W4\UiFramework\Components\Forms\Input\Input;
 use W4\UiFramework\Core\ComponentFactory;
 use W4\UiFramework\Core\ComponentRegistry;
@@ -12,9 +13,11 @@ use W4\UiFramework\Managers\ThemeManager;
 use W4\UiFramework\Providers\W4UiFrameworkServiceProvider;
 use W4\UiFramework\Themes\Tailwind\Components\Forms\InputThemeResolver as TailwindInputThemeResolver;
 use W4\UiFramework\Themes\Tailwind\Components\UI\ButtonThemeResolver as TailwindButtonThemeResolver;
+use W4\UiFramework\Themes\Tailwind\Components\UI\DividerThemeResolver as TailwindDividerThemeResolver;
 use W4\UiFramework\View\Components\Render;
 use W4\UiFramework\View\Components\Forms\Input as InputBladeComponent;
 use W4\UiFramework\View\Components\UI\Button as ButtonBladeComponent;
+use W4\UiFramework\View\Components\UI\Divider as DividerBladeComponent;
 
 class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
 {
@@ -32,9 +35,11 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $factory = $this->app->make(ComponentFactory::class);
 
         $button = $factory->make('button');
+        $divider = $factory->make('divider');
         $input = $factory->make('input');
 
         $this->assertInstanceOf(Button::class, $button);
+        $this->assertInstanceOf(Divider::class, $divider);
         $this->assertInstanceOf(Input::class, $input);
     }
 
@@ -51,6 +56,7 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertArrayHasKey('w4-render', $aliases);
         $this->assertSame(Render::class, $aliases['w4-render']);
         $this->assertTrue($this->app->make('view')->exists('w4-ui::components.ui.button'));
+        $this->assertTrue($this->app->make('view')->exists('w4-ui::components.ui.divider'));
     }
 
     public function test_registers_blade_component_with_custom_prefix_from_config(): void
@@ -65,6 +71,7 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertArrayHasKey('admin-render', $aliases);
         $this->assertSame(Render::class, $aliases['admin-render']);
         $this->assertArrayHasKey('admin-button', $aliases);
+        $this->assertArrayHasKey('admin-divider', $aliases);
         $this->assertArrayHasKey('admin-input', $aliases);
     }
 
@@ -79,6 +86,7 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
 
         $this->assertArrayHasKey('w4-render', $aliases);
         $this->assertArrayHasKey('w4-button', $aliases);
+        $this->assertArrayHasKey('w4-divider', $aliases);
         $this->assertArrayHasKey('w4-input', $aliases);
     }
 
@@ -374,6 +382,31 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertStringNotContainsString('btn-sm', $buttonHeightPayload['theme']['classes']['root']);
     }
 
+    public function test_blade_divider_maps_props_to_state_and_theme_payload(): void
+    {
+        $bladeDivider = new DividerBladeComponent(
+            text: 'Sección',
+            theme: 'daisyui',
+            variant: 'primary',
+            orientation: 'vertical',
+            active: true,
+            componentId: 'divider-audit-01'
+        );
+
+        $payload = $this->app->make('w4.ui')->payload($bladeDivider->component());
+
+        $this->assertSame('divider', $payload['component']);
+        $this->assertSame('active', $payload['data']['state']);
+        $this->assertSame('vertical', $payload['data']['orientation']);
+        $this->assertSame('divider-audit-01', $payload['data']['meta']['component_id']);
+        $this->assertSame('divider-audit-01', $payload['data']['attributes']['data-component-id']);
+        $this->assertStringContainsString('divider', $payload['theme']['classes']['root']);
+        $this->assertStringContainsString('divider-horizontal', $payload['theme']['classes']['root']);
+        $this->assertStringContainsString('divider-primary', $payload['theme']['classes']['root']);
+        $this->assertSame('separator', $payload['theme']['attributes']['role']);
+        $this->assertSame('vertical', $payload['theme']['attributes']['aria-orientation']);
+    }
+
     public function test_tailwind_theme_resolvers_merge_variant_with_width_and_height_utilities(): void
     {
         $inputResolver = new TailwindInputThemeResolver();
@@ -400,5 +433,19 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertStringContainsString('h-14', $buttonClasses['root']);
         $this->assertStringContainsString('w-52', $buttonClasses['root']);
         $this->assertStringNotContainsString('py-1.5', $buttonClasses['root']);
+
+        $dividerResolver = new TailwindDividerThemeResolver();
+        $dividerClasses = $dividerResolver->classes([
+            'variant' => 'primary',
+            'size' => 'md',
+            'orientation' => 'horizontal',
+            'attributes' => ['class' => 'mt-6'],
+        ]);
+
+        $this->assertStringContainsString('before:border-blue-500', $dividerClasses['root']);
+        $this->assertStringContainsString('after:border-blue-500', $dividerClasses['root']);
+        $this->assertStringContainsString('before:border-t-2', $dividerClasses['root']);
+        $this->assertStringContainsString('after:border-t-2', $dividerClasses['root']);
+        $this->assertStringContainsString('mt-6', $dividerClasses['root']);
     }
 }

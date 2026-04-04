@@ -5,6 +5,7 @@ namespace W4\UiFramework\Providers;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use W4\UiFramework\Components\UI\Button\Button;
+use W4\UiFramework\Components\UI\Divider\Divider;
 use W4\UiFramework\Components\Forms\Input\Input;
 use W4\UiFramework\Core\ComponentFactory;
 use W4\UiFramework\Core\ComponentRegistry;
@@ -17,9 +18,11 @@ use W4\UiFramework\Renderers\BladeRenderer;
 use W4\UiFramework\Support\W4UiManager;
 use W4\UiFramework\Themes\Bootstrap\BootstrapTheme;
 use W4\UiFramework\Themes\DaisyUI\DaisyTheme;
+use W4\UiFramework\Themes\Tailwind\TailwindTheme;
 use W4\UiFramework\View\Components\Render as RenderComponent;
 // Componentes w4-component
 use W4\UiFramework\View\Components\UI\Button as ButtonBladeComponent;
+use W4\UiFramework\View\Components\UI\Divider as DividerBladeComponent;
 use W4\UiFramework\View\Components\Forms\Input as InputBladeComponent;
 
 class W4UiFrameworkServiceProvider extends ServiceProvider
@@ -34,6 +37,7 @@ class W4UiFrameworkServiceProvider extends ServiceProvider
         $this->app->singleton(ComponentRegistry::class, function () {
             return (new ComponentRegistry())
                 ->register('button', Button::class)
+                ->register('divider', Divider::class)
                 ->register('input', Input::class);
         });
 
@@ -48,6 +52,7 @@ class W4UiFrameworkServiceProvider extends ServiceProvider
 
             $manager->register('bootstrap', new BootstrapTheme());
             $manager->register('daisyui', new DaisyTheme());
+            $manager->register('tailwind', new TailwindTheme());
 
             return $manager;
         });
@@ -107,6 +112,7 @@ class W4UiFrameworkServiceProvider extends ServiceProvider
 
         Blade::component($this->componentAlias($prefix, 'render'), RenderComponent::class);
         Blade::component($this->componentAlias($prefix, 'button'), ButtonBladeComponent::class);
+        Blade::component($this->componentAlias($prefix, 'divider'), DividerBladeComponent::class);
         Blade::component($this->componentAlias($prefix, 'input'), InputBladeComponent::class);
     }
 
