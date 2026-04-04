@@ -244,8 +244,8 @@ w4/inertia-bridge
 
 Namespace sugerido:
 
-W4\UIFramework\LivewireBridge
-W4\UIFramework\InertiaBridge
+W4\UiFramework\LivewireBridge
+W4\UiFramework\InertiaBridge
 
 ---
 
