@@ -28,7 +28,7 @@ class W4UiFrameworkServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(
             __DIR__ . '/../../config/w4-ui-framework.php',
-            'w4_ui_framework'
+            'w4-ui-framework'
         );
 
         $this->app->singleton(ComponentRegistry::class, function () {
@@ -112,7 +112,17 @@ class W4UiFrameworkServiceProvider extends ServiceProvider
 
     protected function resolveComponentPrefix(): string
     {
-        $prefix = (string) config('w4_ui_framework.w4_ui_component_prefix', 'w4');
+        $prefix = config('w4-ui-framework.w4_ui_component_prefix');
+
+        // if (! is_string($prefix) || $prefix === '') {
+        //     $prefix = config('w4-ui-framework.w4_ui_component_prefix');
+        // }
+
+        if (! is_string($prefix) || $prefix === '') {
+            $prefix = 'w4';
+        }
+
+        $prefix = (string) $prefix;
         $normalized = strtolower(trim($prefix));
         $normalized = str_replace(['_', ' '], '-', $normalized);
 

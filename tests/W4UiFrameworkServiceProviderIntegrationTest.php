@@ -2,7 +2,6 @@
 
 namespace W4\UiFramework\Tests;
 
-use Illuminate\Support\Facades\Log;
 use W4\UiFramework\Components\UI\Button\Button;
 use W4\UiFramework\Components\UI\Button\ButtonComponentEvent;
 use W4\UiFramework\Components\Forms\Input\Input;
@@ -41,8 +40,8 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
 
     public function test_loads_default_config_values(): void
     {
-        $this->assertSame('bootstrap', config('w4_ui_framework.theme'));
-        $this->assertSame('blade', config('w4_ui_framework.renderer'));
+        $this->assertSame('bootstrap', config('w4-ui-framework.theme'));
+        $this->assertSame('blade', config('w4-ui-framework.renderer'));
     }
 
     public function test_registers_blade_component_and_view_namespace(): void
@@ -56,7 +55,7 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
 
     public function test_registers_blade_component_with_custom_prefix_from_config(): void
     {
-        config()->set('w4_ui_framework.w4_ui_component_prefix', 'admin');
+        config()->set('w4-ui-framework.w4_ui_component_prefix', 'admin');
 
         $provider = new W4UiFrameworkServiceProvider($this->app);
         $provider->boot();
@@ -67,6 +66,20 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertSame(Render::class, $aliases['admin-render']);
         $this->assertArrayHasKey('admin-button', $aliases);
         $this->assertArrayHasKey('admin-input', $aliases);
+    }
+
+    public function test_registers_blade_component_with_custom_prefix_from_dashed_config_key(): void
+    {
+        config()->set('w4-ui-framework.w4_ui_component_prefix', 'w4');
+
+        $provider = new W4UiFrameworkServiceProvider($this->app);
+        $provider->boot();
+
+        $aliases = $this->app->make('blade.compiler')->getClassComponentAliases();
+
+        $this->assertArrayHasKey('w4-render', $aliases);
+        $this->assertArrayHasKey('w4-button', $aliases);
+        $this->assertArrayHasKey('w4-input', $aliases);
     }
 
     public function test_publishes_config_file_to_expected_target(): void

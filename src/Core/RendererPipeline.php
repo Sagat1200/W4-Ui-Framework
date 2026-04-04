@@ -17,7 +17,7 @@ class RendererPipeline
         array $resolvedTheme = [],
         ?string $renderer = null
     ): mixed {
-        $driver = $renderer ?? config('w4_ui_framework.renderer', 'blade');
+        $driver = $renderer ?? config('w4-ui-framework.renderer', 'blade');
 
         $rendererInstance = $this->rendererManager->driver($driver);
 
