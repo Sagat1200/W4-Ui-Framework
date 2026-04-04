@@ -9,6 +9,7 @@ use W4\UiFramework\Themes\Tailwind\Components\UI\DividerThemeResolver;
 use W4\UiFramework\Themes\Tailwind\Components\UI\HeadingThemeResolver;
 use W4\UiFramework\Themes\Tailwind\Components\UI\IconThemeResolver;
 use W4\UiFramework\Themes\Tailwind\Components\UI\IconButtonThemeResolver;
+use W4\UiFramework\Themes\Tailwind\Components\UI\LabelThemeResolver;
 
 class TailwindTheme extends AbstractTheme
 {
@@ -19,6 +20,7 @@ class TailwindTheme extends AbstractTheme
         $this->registerResolver('heading', new HeadingThemeResolver());
         $this->registerResolver('icon', new IconThemeResolver());
         $this->registerResolver('icon-button', new IconButtonThemeResolver());
+        $this->registerResolver('label', new LabelThemeResolver());
         $this->registerResolver('input', new InputThemeResolver());
     }
 

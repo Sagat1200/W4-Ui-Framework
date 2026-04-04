@@ -8,6 +8,7 @@ use W4\UiFramework\Components\UI\Divider\Divider;
 use W4\UiFramework\Components\UI\Heading\Heading;
 use W4\UiFramework\Components\UI\Icon\Icon;
 use W4\UiFramework\Components\UI\IconButton\IconButton;
+use W4\UiFramework\Components\UI\Label\Label;
 use W4\UiFramework\Components\Forms\Input\Input;
 use W4\UiFramework\Core\ComponentFactory;
 use W4\UiFramework\Core\ComponentRegistry;
@@ -20,6 +21,7 @@ use W4\UiFramework\Themes\Tailwind\Components\UI\DividerThemeResolver as Tailwin
 use W4\UiFramework\Themes\Tailwind\Components\UI\HeadingThemeResolver as TailwindHeadingThemeResolver;
 use W4\UiFramework\Themes\Tailwind\Components\UI\IconThemeResolver as TailwindIconThemeResolver;
 use W4\UiFramework\Themes\Tailwind\Components\UI\IconButtonThemeResolver as TailwindIconButtonThemeResolver;
+use W4\UiFramework\Themes\Tailwind\Components\UI\LabelThemeResolver as TailwindLabelThemeResolver;
 use W4\UiFramework\View\Components\Render;
 use W4\UiFramework\View\Components\Forms\Input as InputBladeComponent;
 use W4\UiFramework\View\Components\UI\Button as ButtonBladeComponent;
@@ -27,6 +29,7 @@ use W4\UiFramework\View\Components\UI\Divider as DividerBladeComponent;
 use W4\UiFramework\View\Components\UI\Heading as HeadingBladeComponent;
 use W4\UiFramework\View\Components\UI\Icon as IconBladeComponent;
 use W4\UiFramework\View\Components\UI\IconButton as IconButtonBladeComponent;
+use W4\UiFramework\View\Components\UI\Label as LabelBladeComponent;
 
 class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
 {
@@ -48,6 +51,7 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $heading = $factory->make('heading');
         $icon = $factory->make('icon');
         $iconButton = $factory->make('icon-button');
+        $label = $factory->make('label');
         $input = $factory->make('input');
 
         $this->assertInstanceOf(Button::class, $button);
@@ -55,6 +59,7 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertInstanceOf(Heading::class, $heading);
         $this->assertInstanceOf(Icon::class, $icon);
         $this->assertInstanceOf(IconButton::class, $iconButton);
+        $this->assertInstanceOf(Label::class, $label);
         $this->assertInstanceOf(Input::class, $input);
     }
 
@@ -75,6 +80,7 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertTrue($this->app->make('view')->exists('w4-ui::components.ui.heading'));
         $this->assertTrue($this->app->make('view')->exists('w4-ui::components.ui.icon'));
         $this->assertTrue($this->app->make('view')->exists('w4-ui::components.ui.icon-button'));
+        $this->assertTrue($this->app->make('view')->exists('w4-ui::components.ui.label'));
     }
 
     public function test_registers_blade_component_with_custom_prefix_from_config(): void
@@ -93,6 +99,7 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertArrayHasKey('admin-heading', $aliases);
         $this->assertArrayHasKey('admin-icon', $aliases);
         $this->assertArrayHasKey('admin-icon-button', $aliases);
+        $this->assertArrayHasKey('admin-label', $aliases);
         $this->assertArrayHasKey('admin-input', $aliases);
     }
 
@@ -111,6 +118,7 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertArrayHasKey('w4-heading', $aliases);
         $this->assertArrayHasKey('w4-icon', $aliases);
         $this->assertArrayHasKey('w4-icon-button', $aliases);
+        $this->assertArrayHasKey('w4-label', $aliases);
         $this->assertArrayHasKey('w4-input', $aliases);
     }
 
@@ -505,6 +513,33 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertSame('true', $payload['theme']['attributes']['aria-pressed']);
     }
 
+    public function test_blade_label_maps_props_to_state_and_theme_payload(): void
+    {
+        $bladeLabel = new LabelBladeComponent(
+            label: 'Correo',
+            text: 'Correo electrónico',
+            for: 'email',
+            theme: 'tailwind',
+            variant: 'primary',
+            size: 'lg',
+            active: true,
+            componentId: 'label-audit-01'
+        );
+
+        $payload = $this->app->make('w4.ui')->payload($bladeLabel->component());
+
+        $this->assertSame('label', $payload['component']);
+        $this->assertSame('active', $payload['data']['state']);
+        $this->assertSame('Correo electrónico', $payload['data']['text']);
+        $this->assertSame('email', $payload['data']['for']);
+        $this->assertSame('label-audit-01', $payload['data']['meta']['component_id']);
+        $this->assertSame('label-audit-01', $payload['data']['attributes']['data-component-id']);
+        $this->assertStringContainsString('text-blue-600', $payload['theme']['classes']['root']);
+        $this->assertStringContainsString('underline', $payload['theme']['classes']['root']);
+        $this->assertSame('email', $payload['theme']['attributes']['for']);
+        $this->assertSame('false', $payload['theme']['attributes']['aria-hidden']);
+    }
+
     public function test_icon_button_resolves_classes_for_daisyui_bootstrap_and_tailwind(): void
     {
         $daisyPayload = $this->app->make('w4.ui')->payload(
@@ -539,6 +574,45 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertStringContainsString('inline-flex', $tailwindPayload['theme']['classes']['root']);
         $this->assertStringContainsString('bg-blue-600', $tailwindPayload['theme']['classes']['root']);
         $this->assertSame('Actualizar', $tailwindPayload['theme']['attributes']['aria-label']);
+    }
+
+    public function test_label_resolves_classes_for_daisyui_bootstrap_and_tailwind(): void
+    {
+        $daisyPayload = $this->app->make('w4.ui')->payload(
+            Label::make('Correo')
+                ->text('Correo electrónico')
+                ->for('email')
+                ->theme('daisyui')
+                ->variant('primary')
+        );
+
+        $bootstrapPayload = $this->app->make('w4.ui')->payload(
+            Label::make('Correo')
+                ->text('Correo electrónico')
+                ->for('email')
+                ->theme('bootstrap')
+                ->variant('primary')
+        );
+
+        $tailwindPayload = $this->app->make('w4.ui')->payload(
+            Label::make('Correo')
+                ->text('Correo electrónico')
+                ->for('email')
+                ->theme('tailwind')
+                ->variant('primary')
+        );
+
+        $this->assertStringContainsString('label', $daisyPayload['theme']['classes']['root']);
+        $this->assertStringContainsString('text-primary', $daisyPayload['theme']['classes']['root']);
+        $this->assertSame('email', $daisyPayload['theme']['attributes']['for']);
+
+        $this->assertStringContainsString('form-label', $bootstrapPayload['theme']['classes']['root']);
+        $this->assertStringContainsString('text-primary', $bootstrapPayload['theme']['classes']['root']);
+        $this->assertSame('email', $bootstrapPayload['theme']['attributes']['for']);
+
+        $this->assertStringContainsString('inline-block', $tailwindPayload['theme']['classes']['root']);
+        $this->assertStringContainsString('text-blue-600', $tailwindPayload['theme']['classes']['root']);
+        $this->assertSame('email', $tailwindPayload['theme']['attributes']['for']);
     }
 
     public function test_tailwind_theme_resolvers_merge_variant_with_width_and_height_utilities(): void
@@ -617,5 +691,16 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertStringContainsString('h-14', $iconButtonClasses['root']);
         $this->assertStringContainsString('w-14', $iconButtonClasses['root']);
         $this->assertStringNotContainsString('h-8', $iconButtonClasses['root']);
+
+        $labelResolver = new TailwindLabelThemeResolver();
+        $labelClasses = $labelResolver->classes([
+            'variant' => 'primary',
+            'size' => 'sm',
+            'attributes' => ['class' => 'mt-2'],
+        ]);
+
+        $this->assertStringContainsString('text-blue-600', $labelClasses['root']);
+        $this->assertStringContainsString('text-sm', $labelClasses['root']);
+        $this->assertStringContainsString('mt-2', $labelClasses['root']);
     }
 }

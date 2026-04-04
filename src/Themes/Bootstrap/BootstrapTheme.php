@@ -8,6 +8,7 @@ use W4\UiFramework\Themes\Bootstrap\Components\UI\DividerThemeResolver;
 use W4\UiFramework\Themes\Bootstrap\Components\UI\HeadingThemeResolver;
 use W4\UiFramework\Themes\Bootstrap\Components\UI\IconThemeResolver;
 use W4\UiFramework\Themes\Bootstrap\Components\UI\IconButtonThemeResolver;
+use W4\UiFramework\Themes\Bootstrap\Components\UI\LabelThemeResolver;
 use W4\UiFramework\Themes\Bootstrap\Components\Forms\InputThemeResolver;
 
 class BootstrapTheme extends AbstractTheme
@@ -19,6 +20,7 @@ class BootstrapTheme extends AbstractTheme
         $this->registerResolver('heading', new HeadingThemeResolver());
         $this->registerResolver('icon', new IconThemeResolver());
         $this->registerResolver('icon-button', new IconButtonThemeResolver());
+        $this->registerResolver('label', new LabelThemeResolver());
         $this->registerResolver('input', new InputThemeResolver());
     }
 
