@@ -1,10 +1,176 @@
 <?php
 
-namespace W4\Ui\Framework\Components\UI\Icon;
+namespace W4\UiFramework\Components\UI\Icon;
 
+use InvalidArgumentException;
 use W4\UiFramework\Core\BaseComponent;
+use W4\UiFramework\Support\Traits\InteractsWithSize;
+use W4\UiFramework\Support\Traits\InteractsWithState;
+use W4\UiFramework\Support\Traits\InteractsWithVariant;
 
 class Icon extends BaseComponent
 {
-    //
+    use InteractsWithVariant;
+    use InteractsWithSize;
+    use InteractsWithState;
+
+    protected ?string $icon = null;
+
+    protected bool $spin = false;
+
+    protected bool $decorative = false;
+
+    protected IconInteractState $interactState;
+
+    protected IconStateMachine $stateMachine;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->variant = 'neutral';
+        $this->size = 'md';
+        $this->state = IconComponentState::ENABLED;
+        $this->interactState = new IconInteractState();
+        $this->stateMachine = new IconStateMachine();
+    }
+
+    public function componentName(): string
+    {
+        return 'icon';
+    }
+
+    public function icon(?string $icon = null): string|static|null
+    {
+        if ($icon === null) {
+            return $this->icon;
+        }
+
+        $this->icon = trim($icon);
+
+        return $this;
+    }
+
+    public function spin(?bool $spin = null): bool|static
+    {
+        if ($spin === null) {
+            return $this->spin;
+        }
+
+        $this->spin = $spin;
+
+        return $this;
+    }
+
+    public function decorative(?bool $decorative = null): bool|static
+    {
+        if ($decorative === null) {
+            return $this->decorative;
+        }
+
+        $this->decorative = $decorative;
+
+        return $this;
+    }
+
+    public function interactState(?IconInteractState $state = null): IconInteractState|static
+    {
+        if ($state === null) {
+            return $this->interactState;
+        }
+
+        $this->interactState = $state;
+
+        return $this;
+    }
+
+    public function can(IconComponentEvent $event): bool
+    {
+        return $this->stateMachine->canTransition($this->currentState(), $event);
+    }
+
+    public function dispatch(IconComponentEvent $event): static
+    {
+        $this->state($this->stateMachine->transition($this->currentState(), $event));
+
+        return $this;
+    }
+
+    public function activate(): static
+    {
+        return $this->dispatch(IconComponentEvent::ACTIVATE);
+    }
+
+    public function deactivate(): static
+    {
+        return $this->dispatch(IconComponentEvent::DEACTIVATE);
+    }
+
+    public function disable(): static
+    {
+        return $this->dispatch(IconComponentEvent::DISABLE);
+    }
+
+    public function enable(): static
+    {
+        return $this->dispatch(IconComponentEvent::ENABLE);
+    }
+
+    public function hide(): static
+    {
+        return $this->dispatch(IconComponentEvent::HIDE);
+    }
+
+    public function show(): static
+    {
+        return $this->dispatch(IconComponentEvent::SHOW);
+    }
+
+    public function resetState(): static
+    {
+        return $this->dispatch(IconComponentEvent::RESET);
+    }
+
+    protected function currentState(): IconComponentState
+    {
+        if ($this->state instanceof IconComponentState) {
+            return $this->state;
+        }
+
+        if (is_string($this->state)) {
+            try {
+                return IconComponentState::from($this->state);
+            } catch (\ValueError) {
+                throw new InvalidArgumentException('Estado de icon inválido [' . (string) $this->state . ']');
+            }
+        }
+
+        throw new InvalidArgumentException('El estado actual del icon no es válido.');
+    }
+
+    public function toThemeContext(): array
+    {
+        return array_merge(parent::toThemeContext(), [
+            'icon' => $this->icon(),
+            'spin' => $this->spin(),
+            'decorative' => $this->decorative(),
+            'variant' => $this->variant(),
+            'size' => $this->size(),
+            'state' => $this->stateValue(),
+            'interact_state' => $this->interactState()->toArray(),
+        ]);
+    }
+
+    public function toArray(): array
+    {
+        return array_merge(parent::toArray(), [
+            'icon' => $this->icon(),
+            'spin' => $this->spin(),
+            'decorative' => $this->decorative(),
+            'variant' => $this->variant(),
+            'size' => $this->size(),
+            'state' => $this->stateValue(),
+            'interact_state' => $this->interactState()->toArray(),
+        ]);
+    }
 }

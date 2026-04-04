@@ -6,6 +6,7 @@ use W4\UiFramework\Components\UI\Button\Button;
 use W4\UiFramework\Components\UI\Button\ButtonComponentEvent;
 use W4\UiFramework\Components\UI\Divider\Divider;
 use W4\UiFramework\Components\UI\Heading\Heading;
+use W4\UiFramework\Components\UI\Icon\Icon;
 use W4\UiFramework\Components\Forms\Input\Input;
 use W4\UiFramework\Core\ComponentFactory;
 use W4\UiFramework\Core\ComponentRegistry;
@@ -16,11 +17,13 @@ use W4\UiFramework\Themes\Tailwind\Components\Forms\InputThemeResolver as Tailwi
 use W4\UiFramework\Themes\Tailwind\Components\UI\ButtonThemeResolver as TailwindButtonThemeResolver;
 use W4\UiFramework\Themes\Tailwind\Components\UI\DividerThemeResolver as TailwindDividerThemeResolver;
 use W4\UiFramework\Themes\Tailwind\Components\UI\HeadingThemeResolver as TailwindHeadingThemeResolver;
+use W4\UiFramework\Themes\Tailwind\Components\UI\IconThemeResolver as TailwindIconThemeResolver;
 use W4\UiFramework\View\Components\Render;
 use W4\UiFramework\View\Components\Forms\Input as InputBladeComponent;
 use W4\UiFramework\View\Components\UI\Button as ButtonBladeComponent;
 use W4\UiFramework\View\Components\UI\Divider as DividerBladeComponent;
 use W4\UiFramework\View\Components\UI\Heading as HeadingBladeComponent;
+use W4\UiFramework\View\Components\UI\Icon as IconBladeComponent;
 
 class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
 {
@@ -40,11 +43,13 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $button = $factory->make('button');
         $divider = $factory->make('divider');
         $heading = $factory->make('heading');
+        $icon = $factory->make('icon');
         $input = $factory->make('input');
 
         $this->assertInstanceOf(Button::class, $button);
         $this->assertInstanceOf(Divider::class, $divider);
         $this->assertInstanceOf(Heading::class, $heading);
+        $this->assertInstanceOf(Icon::class, $icon);
         $this->assertInstanceOf(Input::class, $input);
     }
 
@@ -63,6 +68,7 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertTrue($this->app->make('view')->exists('w4-ui::components.ui.button'));
         $this->assertTrue($this->app->make('view')->exists('w4-ui::components.ui.divider'));
         $this->assertTrue($this->app->make('view')->exists('w4-ui::components.ui.heading'));
+        $this->assertTrue($this->app->make('view')->exists('w4-ui::components.ui.icon'));
     }
 
     public function test_registers_blade_component_with_custom_prefix_from_config(): void
@@ -79,6 +85,7 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertArrayHasKey('admin-button', $aliases);
         $this->assertArrayHasKey('admin-divider', $aliases);
         $this->assertArrayHasKey('admin-heading', $aliases);
+        $this->assertArrayHasKey('admin-icon', $aliases);
         $this->assertArrayHasKey('admin-input', $aliases);
     }
 
@@ -95,6 +102,7 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertArrayHasKey('w4-button', $aliases);
         $this->assertArrayHasKey('w4-divider', $aliases);
         $this->assertArrayHasKey('w4-heading', $aliases);
+        $this->assertArrayHasKey('w4-icon', $aliases);
         $this->assertArrayHasKey('w4-input', $aliases);
     }
 
@@ -438,6 +446,33 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertSame(1, $payload['theme']['attributes']['aria-level']);
     }
 
+    public function test_blade_icon_maps_props_to_state_and_theme_payload(): void
+    {
+        $bladeIcon = new IconBladeComponent(
+            label: 'Actualizar',
+            icon: 'heroicon-o-arrow-path',
+            theme: 'tailwind',
+            variant: 'primary',
+            size: 'lg',
+            spin: true,
+            active: true,
+            componentId: 'icon-audit-01'
+        );
+
+        $payload = $this->app->make('w4.ui')->payload($bladeIcon->component());
+
+        $this->assertSame('icon', $payload['component']);
+        $this->assertSame('active', $payload['data']['state']);
+        $this->assertSame('heroicon-o-arrow-path', $payload['data']['icon']);
+        $this->assertTrue($payload['data']['spin']);
+        $this->assertSame('icon-audit-01', $payload['data']['meta']['component_id']);
+        $this->assertSame('icon-audit-01', $payload['data']['attributes']['data-component-id']);
+        $this->assertStringContainsString('text-blue-600', $payload['theme']['classes']['root']);
+        $this->assertStringContainsString('animate-spin', $payload['theme']['classes']['root']);
+        $this->assertSame('img', $payload['theme']['attributes']['role']);
+        $this->assertSame('false', $payload['theme']['attributes']['aria-hidden']);
+    }
+
     public function test_tailwind_theme_resolvers_merge_variant_with_width_and_height_utilities(): void
     {
         $inputResolver = new TailwindInputThemeResolver();
@@ -489,5 +524,18 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertStringContainsString('text-blue-600', $headingClasses['root']);
         $this->assertStringContainsString('text-2xl', $headingClasses['root']);
         $this->assertStringContainsString('mt-6', $headingClasses['root']);
+
+        $iconResolver = new TailwindIconThemeResolver();
+        $iconClasses = $iconResolver->classes([
+            'variant' => 'primary',
+            'size' => 'lg',
+            'spin' => true,
+            'attributes' => ['class' => 'mt-2'],
+        ]);
+
+        $this->assertStringContainsString('text-blue-600', $iconClasses['root']);
+        $this->assertStringContainsString('text-lg', $iconClasses['root']);
+        $this->assertStringContainsString('animate-spin', $iconClasses['root']);
+        $this->assertStringContainsString('mt-2', $iconClasses['root']);
     }
 }
