@@ -285,7 +285,7 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
 
         $logContent = file_get_contents($logPath);
         $this->assertIsString($logContent);
-        $this->assertStringContainsString('w4_ui.component_debug', $logContent);
+        $this->assertStringContainsString('w4_ui.component_log', $logContent);
         $this->assertStringContainsString('"origin":"payload"', $logContent);
         $this->assertStringContainsString('"component":"button"', $logContent);
         $this->assertStringContainsString('"component_id":12547', $logContent);
