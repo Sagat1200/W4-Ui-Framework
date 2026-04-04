@@ -7,6 +7,7 @@ use W4\UiFramework\Themes\DaisyUI\Components\UI\ButtonThemeResolver;
 use W4\UiFramework\Themes\DaisyUI\Components\UI\DividerThemeResolver;
 use W4\UiFramework\Themes\DaisyUI\Components\UI\HeadingThemeResolver;
 use W4\UiFramework\Themes\DaisyUI\Components\UI\IconThemeResolver;
+use W4\UiFramework\Themes\DaisyUI\Components\UI\IconButtonThemeResolver;
 use W4\UiFramework\Themes\DaisyUI\Components\Forms\InputThemeResolver;
 
 class DaisyTheme extends AbstractTheme
@@ -17,6 +18,7 @@ class DaisyTheme extends AbstractTheme
         $this->registerResolver('divider', new DividerThemeResolver());
         $this->registerResolver('heading', new HeadingThemeResolver());
         $this->registerResolver('icon', new IconThemeResolver());
+        $this->registerResolver('icon-button', new IconButtonThemeResolver());
         $this->registerResolver('input', new InputThemeResolver());
     }
 
