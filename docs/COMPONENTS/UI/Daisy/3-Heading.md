@@ -79,8 +79,8 @@ Eventos soportados por la state machine:
 - `xs` -> `text-xs`
 - `sm` -> `text-sm`
 - `md` -> `text-base`
-- `lg` -> `text-lg`
-- `xl` -> `text-xl`
+- `lg` -> `text-xl`
+- `xl` -> `text-2xl`
 
 Relación con `level` cuando no hay `size(...)` explícito:
 

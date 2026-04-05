@@ -486,6 +486,24 @@ class W4UiFrameworkServiceProviderIntegrationTest extends TestCase
         $this->assertStringNotContainsString('text-3xl', $explicitSizePayload['theme']['classes']['root']);
     }
 
+    public function test_daisy_heading_xl_is_larger_than_lg_scale_mapping(): void
+    {
+        $lgPayload = $this->app->make('w4.ui')->payload(
+            Heading::make('Título')
+                ->theme('daisyui')
+                ->size('lg')
+        );
+
+        $xlPayload = $this->app->make('w4.ui')->payload(
+            Heading::make('Título')
+                ->theme('daisyui')
+                ->size('xl')
+        );
+
+        $this->assertStringContainsString('text-xl', $lgPayload['theme']['classes']['root']);
+        $this->assertStringContainsString('text-2xl', $xlPayload['theme']['classes']['root']);
+    }
+
     public function test_blade_icon_maps_props_to_state_and_theme_payload(): void
     {
         $bladeIcon = new IconBladeComponent(

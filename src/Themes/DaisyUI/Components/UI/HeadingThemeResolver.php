@@ -30,8 +30,8 @@ class HeadingThemeResolver implements ComponentThemeResolverInterface
             'xs' => 'text-xs',
             'sm' => 'text-sm',
             'md' => 'text-base',
-            'lg' => 'text-lg',
-            'xl' => 'text-xl',
+            'lg' => 'text-xl',
+            'xl' => 'text-2xl',
             default => 'text-base',
         });
 

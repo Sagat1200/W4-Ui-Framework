@@ -28,7 +28,7 @@ Se mantiene igual en los 3 temas:
 |Resolver|`DaisyUI\...\HeadingThemeResolver`|`Bootstrap\...\HeadingThemeResolver`|`Tailwind\...\HeadingThemeResolver`|
 |Clase base|`font-semibold leading-tight`|`fw-semibold`|`font-semibold leading-tight tracking-tight`|
 |Variantes|`text-primary`, `text-secondary`, `text-accent`, `text-success`, `text-warning`, `text-error`, `text-info`, `text-base-content`|`text-primary`, `text-secondary`, `text-success`, `text-warning`, `text-danger`, `text-info`, `text-light`, `text-dark`, `text-body`|`text-blue-*`, `text-slate-*`, `text-violet-*`, `text-emerald-*`, `text-amber-*`, `text-rose-*`, `text-cyan-*`|
-|Tamaños|`text-xs`, `text-sm`, `text-base`, `text-lg`, `text-xl`|`fs-6`, `fs-5`, `fs-4`, `fs-3`, `fs-2`|`text-sm`, `text-base`, `text-xl`, `text-2xl`, `text-3xl`|
+|Tamaños|`text-xs`, `text-sm`, `text-base`, `text-xl`, `text-2xl`|`fs-6`, `fs-5`, `fs-4`, `fs-3`, `fs-2`|`text-sm`, `text-base`, `text-xl`, `text-2xl`, `text-3xl`|
 |Estado `active`|Agrega `underline`|Agrega `text-decoration-underline`|Agrega `underline underline-offset-4`|
 |Estado `hidden`|Agrega `hidden`|Agrega `d-none`|Agrega `hidden`|
 |Merge de `class` usuario|Sí|Sí|Sí|
