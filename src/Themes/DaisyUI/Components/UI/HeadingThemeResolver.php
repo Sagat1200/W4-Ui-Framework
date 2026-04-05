@@ -13,7 +13,7 @@ class HeadingThemeResolver implements ComponentThemeResolverInterface
         $size = $context['size'] ?? 'md';
         $state = $context['state'] ?? 'enabled';
 
-        $root = ClassBag::make(['font-semibold', 'leading-tight']);
+        $root = ClassBag::make();
 
         $root->add(match ($variant) {
             'primary' => 'text-primary',
